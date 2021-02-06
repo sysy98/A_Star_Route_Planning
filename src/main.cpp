@@ -27,6 +27,28 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
     return std::move(contents);
 }
 
+
+bool CheckRange(float &user_input) 
+{
+  if (user_input>= 0 && user_input<= 100) 
+    return true;
+  return false;
+}
+
+
+float getInput()
+{
+  float input;
+  std::cin >> input;
+  
+  while (!CheckRange(input)) {
+    std::cout << "The value should be in range of 1-100, please enter it again:";
+    std::cin >> input;
+  }
+  return input;
+}
+
+
 int main(int argc, const char **argv)
 {    
     std::string osm_data_file = "";
@@ -51,17 +73,17 @@ int main(int argc, const char **argv)
         else
             osm_data = std::move(*data);
     }
-    
-    // TODO 1: Declare floats `start_x`, `start_y`, `end_x`, and `end_y` and get
-    // user input for these values using std::cin. Pass the user input to the
-    // RoutePlanner object below in place of 10, 10, 90, 90.
-    float start_x, start_y, end_x, end_y;
-    std::cout << "Enter start_x, start_y, end_x, and end_y, and their values are all between 0 and 100: ";
-    std::cin >> start_x >> start_y >> end_x >> end_y;
-    // Build Model.
+  
+    std::cout <<  "Please enter start_x, which is in the range of 1-100: ";
+    auto start_x = getInput();
+    std::cout <<  "Please enter start_y, which is in the range of 1-100: ";
+    auto start_y = getInput();
+    std::cout <<  "Please enter end_x, which is in the range of 1-100: ";
+    auto end_x = getInput();
+    std::cout <<  "Please enter end_y, which is in the range of 1-100: ";
+    auto end_y = getInput();
+  
     RouteModel model{osm_data};
-
-    // Create RoutePlanner object and perform A* search.
     RoutePlanner route_planner{model, start_x, start_y, end_x, end_y};
     route_planner.AStarSearch();
 
